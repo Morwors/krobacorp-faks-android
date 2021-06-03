@@ -71,18 +71,16 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
         users.addAll(tmpUsers);
     }
 
-    private void getUserData() {
-        for (int i = 0; i < 10; i++) {
-            String name = UUID.randomUUID().toString();
-            User user = new User(name);
-            users.add(user);
-        }
-    }
 
     @Override
     public void onUserClick(int position) {
         Log.d("chat","Got user: "+users.get(position).getUsername());
-        ChatService.getRoom(users.get(position));
+        String roomID = ChatService.getRoom(users.get(position));
+        if(roomID!=null){
+            Intent intent = new Intent(this, MessageListActivity.class);
+            intent.putExtra("roomID", roomID);
+            startActivity(intent);
+        }
 //        System.out.println("Clicked on element: " + users.get(position));
     }
 }

@@ -36,7 +36,7 @@ public class ChatService {
         }
     }
 
-    public static void getRoom(User user) {
+    public static String getRoom(User user) {
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Room");
             ParseUser parseUser = ParseUser.getCurrentUser();
@@ -44,26 +44,28 @@ public class ChatService {
             List<ParseObject> roomsObjects = query.find();
             Log.d("chat", "Retrieved " + roomsObjects.size() + " rooms");
             if(roomsObjects.size()==0){
-                createRoom(user);
-                return;
+                return createRoom(user);
             }
-            return;
+            return roomsObjects.get(0).getObjectId();
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
+            return null;
         }
 
 
     }
 
-    public static void createRoom(User user) {
+    public static String createRoom(User user) {
         try {
             ParseObject room = new ParseObject("Room");
             ParseUser parseUser = ParseUser.getCurrentUser();
             List<String> usernames = Arrays.asList(parseUser.getUsername(), user.getUsername());
             room.put("users", usernames);
             room.save();
+            return room.getObjectId();
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
+            return null;
         }
 
     }

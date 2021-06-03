@@ -2,11 +2,13 @@ package com.example.krobachat;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.krobachat.services.UserService;
+import com.parse.ParseUser;
 
 public class LogInActivity extends AppCompatActivity {
     Button loginButton;
@@ -27,5 +29,9 @@ public class LogInActivity extends AppCompatActivity {
 
     void login(){
         UserService.loginUser(usernameInput.getText().toString(), passwordInput.getText().toString());
+        if(ParseUser.getCurrentUser()!=null){
+            Intent intent = new Intent(this, UsersListActivity.class);
+            startActivity(intent);
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 
 import com.parse.Parse;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void changeActivity(){
-         Intent intent = new Intent(this, UsersListActivity.class);
-         startActivity(intent);
+         if(ParseUser.getCurrentUser()!= null){
+             Intent intent = new Intent(this, UsersListActivity.class);
+             startActivity(intent);
+         }else{
+             Intent intent = new Intent(this, LogInActivity.class);
+             startActivity(intent);
+         }
+
     }
 }

@@ -12,7 +12,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.KrobaChat">
-        <activity android:name=".UsersListActivity"></activity>
+        <activity android:name=".MessageListActivity"></activity>
+        <activity android:name=".UsersListActivity" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".SignUp" />
         <activity android:name=".Auth.SignUp" />

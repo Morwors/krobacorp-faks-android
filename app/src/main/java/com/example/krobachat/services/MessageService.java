@@ -28,20 +28,28 @@ public class MessageService {
         }
     }
 
-    private static void getAllMessages(String roomID) {
+    public static List<Message> getAllMessages(String roomID) {
         try {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Message");
             List<Message> messages = new ArrayList<>();
-            query.whereEqualTo("room", roomID);
+            ParseObject roomObject = ParseObject.createWithoutData("Room", roomID);
+            query.whereEqualTo("room", roomObject);
 //            query.whereContainsAll("users", Arrays.asList(user1.getUsername(), user2.getUsername()));
             List<ParseObject> messageObjects = query.include("sentBy").find();
-            Log.d("message", "Retrieved " + messageObjects.size() + " messages");
-            for(Message message: (Message[]) messageObjects.toArray()){
+            Log.d("message", "Retrieved " + messageObjects.size() + " messages with room id:"+roomID);
+            for(int i = 0; i<messageObjects.size(); i++){
+                ParseUser parseUser = (ParseUser) messageObjects.get(i).get("sentBy");
+                User u = new User(parseUser.getUsername());
+                Log.d("message", "Looping message:" +u.toString());
+                Message message = new Message(messageObjects.get(i).get("message").toString(), u, messageObjects.get(i).getCreatedAt().toString());
+                Log.d("message", "Got new message:" + message.toString());
                 messages.add(message);
             }
             Log.d("message", "Retrieved " + messages.toString() + " messages");
+            return messages;
         } catch (Exception e) {
             System.out.println("Error: " + e.toString());
+            return null;
         }
 
 

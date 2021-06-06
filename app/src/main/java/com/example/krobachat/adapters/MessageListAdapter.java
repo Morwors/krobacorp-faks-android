@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.krobachat.R;
 import com.example.krobachat.interfaces.ILoadmore;
 import com.example.krobachat.model.Message;
+import com.example.krobachat.store.UserStore;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -42,7 +43,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         Message message = (Message) mMessageList.get(position);
         Log.d("message", "Checking message view type for:" + message.toString());
 
-        if (message.getSentBy().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
+        if (message.getSentBy().getUsername().equals(UserStore.getUser().getUsername())) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -92,11 +93,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageText.setText(message.getMessage());
+            messageText.setText(message.getSentBy().getUsername());
 
             // Format the stored timestamp into a readable String using method.
             timeText.setText(message.getCreatedAt());
-            nameText.setText(message.getSentBy().getUsername());
+            nameText.setText(message.getMessage());
 
             // Insert the profile image from the URL into the ImageView.
 //            Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);

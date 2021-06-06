@@ -14,4 +14,7 @@
     <!-- Change the following strings as required -->
     <string name="back4app_app_id">5366YEXhlrsWabbCNXt5nquOgHbb2XNJ38aYVcui</string>
     <string name="back4app_client_key">JaCtrweofkFRBhNtuxM6eLHyuqnBKoTr9E4GAFuq</string>
+
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 </resources>

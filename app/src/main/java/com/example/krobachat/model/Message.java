@@ -4,11 +4,13 @@ public class Message {
     private String message;
     private User sentBy;
     private String createdAt;
+    private String roomID;
 
-    public Message(String message, User sentBy, String createdAt) {
+    public Message(String message, User sentBy, String roomID) {
         this.message = message;
         this.sentBy = sentBy;
-        this.createdAt = createdAt;
+        this.roomID = roomID;
+//        this.createdAt = createdAt;
     }
 
     public String getMessage() {

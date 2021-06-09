@@ -64,17 +64,19 @@ public class MessageListActivity extends AppCompatActivity {
         sendMessageButton.setOnClickListener(v -> {
             sendMessage();
         });
-//        MessageService.startReadingMessages(roomID, new Callback() {
-//            @Override
-//            public void methodToCallback(Message msg) {
-//                messages.add(msg);
-//                mMessageAdapter.notifyItemInserted(messages.size() - 1);
-////                notifyItemRangeChanged(int start, int end);`
-////                mMessageAdapter.notifyDataSetChanged();
-//                Log.d("message", "Returned message: " + msg.getMessage());
-//            }
-//        });
-        MessageService.startReadingMessages("60bd4c63e8bd651148bf5881");
+        MessageService.startReadingMessages(roomID, new Callback() {
+            @Override
+            public void methodToCallback(Message msg) {
+                refresh.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        messages.add(msg);
+                        mMessageAdapter.notifyItemInserted(messages.size() - 1);
+                        Log.d("message", "Returned message: " + msg.getMessage());
+                    }
+                });
+            }
+        });
     }
 
     @Override
@@ -85,44 +87,7 @@ public class MessageListActivity extends AppCompatActivity {
     private void sendMessage() {
         String message = messageEditText.getText().toString();
         messageEditText.getText().clear();
-        MessageService.sendMessage(message, roomID, new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("Sent messages: " + response.body().string());
-            }
-        });
+        MessageService.sendMessage(message, roomID);
     }
 
-    private void getAllMessagesFromRoom() {
-        List<Message> msgs = new ArrayList<>();
-        MessageService.getAllMessages(roomID, new okhttp3.Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                System.out.println("Got response");
-                String jsonOutput = response.body().string();
-                System.out.println("Got messages: " + jsonOutput);
-                Type listType = new TypeToken<List<Message>>() {
-                }.getType();
-                messages.addAll(gson.fromJson(jsonOutput, listType));
-                refresh.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mMessageAdapter.notifyItemInserted(messages.size() - 1);
-                        System.out.println("Loaded messages: " + messages.toString());
-                        messages.addAll(msgs);
-                    }
-                });
-            }
-        });
-    }
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -28,6 +29,8 @@ import okhttp3.Response;
 
 
 public class ChatService {
+    public static final MediaType JSON
+            = MediaType.parse("application/json; charset=utf-8");
     //    public static List<User> getUsers() {
 //        try {
 //            ParseUser currentUser = ParseUser.getCurrentUser();
@@ -83,15 +86,14 @@ public class ChatService {
         try {
             Gson gson = new Gson();
             List<User> users = Arrays.asList(user, UserStore.getUser());
-            String usersArray = gson.toJson(users);
-            RequestBody formBody = new FormBody.Builder()
-                    .add("users", usersArray)
-                    .build();
+
+            RequestBody body = RequestBody.create(JSON, gson.toJson(users)); // new
+
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
                     .url("http://192.168.0.27:8080/room/findRoom")
-                    .post(formBody)
+                    .post(body)
                     .build();
             Call call = client.newCall(request);
             System.out.println("Adding call to enque");

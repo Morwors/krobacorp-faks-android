@@ -200,6 +200,7 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
     @Override
     public void onUserClick(int position) {
         Log.d("chat", "Got user: " + users.get(position).getUsername());
+        System.out.println("Finding room");
         ChatService.getRoom(users.get(position), new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -212,6 +213,7 @@ public class UsersListActivity extends AppCompatActivity implements UsersAdapter
                 String roomID = response.body().string();
 //                String roomID = null;
                 if (roomID != null) {
+                    System.out.println("Got room: "+ roomID);
                     Intent intent = new Intent(context, MessageListActivity.class);
                     intent.putExtra("roomID", roomID);
                     startActivity(intent);
